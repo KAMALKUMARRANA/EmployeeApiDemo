@@ -1,7 +1,6 @@
 name: Build and Deploy API
 
 on:
-
   push:
     branches:
       - main
@@ -16,11 +15,11 @@ jobs:
 
     - name: Checkout
 
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Setup .NET
 
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
 
       with:
         dotnet-version: 8.0.x
@@ -31,20 +30,20 @@ jobs:
 
     - name: Build
 
-      run: dotnet build --configuration Release
+      run: dotnet build --configuration Release --no-restore
 
     - name: Publish
 
-      run: dotnet publish -c Release -o publish
+      run: dotnet publish --configuration Release --output ./publish
 
-    - name: Deploy to Azure
+    - name: Deploy to Azure Web App
 
-      uses: azure/webapps-deploy@v2
+      uses: azure/webapps-deploy@v3
 
       with:
-        app-name: employee-api-demo
+        app-name: kamal-api-demo-654
 
         publish-profile:
           ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
 
-        package: publish
+        package: ./publish
